@@ -1,0 +1,937 @@
+{
+  "$schema": "../node_modules/@alfresco/adf-core/app.config.schema.json",
+  "ecmHost": "http://localhost:8080",
+  "bpmHost": "http://localhost:8080",
+  "aosHost": "http://localhost:8080/alfresco/aos",
+  "baseShareUrl": "http://localhost:8080/digiworks-enterprise/#/preview/s/",
+  "baseShareFolderUrl": "http://localhost:8080/digiworks-enterprise/#/guest-access/",
+  "snowboundUrl": "{protocol}//{hostname}{:port}/virtualviewer",
+  "alfresco-enterprise-viewer": {
+    "$version": "1.0.0",
+    "enabled" : true,
+    "properties": {
+      "endpoints": {
+        "aev": "http://localhost:8080/OpenAnnotate",
+        "aevVideo": "http://localhost:8080/OpenAnnotateVideo"
+      },
+      "supportedMimetypes": {
+        "videos": [
+          "video/mp4",
+          "video/mpeg"
+        ],
+        "documents":[
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "application/msword",
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          "application/vnd.ms-excel",
+          "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+          "application/vnd.ms-powerpoint",
+          "application/pdf",
+          "image/vnd.dwg",
+          "image/jpeg",
+          "image/png",
+          "image/gif",
+          "image/tiff",
+          "audio/mpeg",
+          "text/plain"
+        ]
+      },
+      "aevVideoSeperate" : false,
+      "alfrescoDocumentStorePrefix": "workspace://SpacesStore/",
+      "extraAEVUrlParams" : {}
+    }
+  },
+  "bpmAlfrescoRepoSourceId": "alfresco-1-AGC-ACS",
+  "maximumAllowedFileSizeInMB":"100",
+  "providers": "ALL",
+  "authType": "BASIC",
+  "customProcessDefinitions": [
+    {
+      "key": "dynamic-collaboration-workflow",
+      "appName": "Dynamic Collaboration Workflow",
+      "startWorkflowRoute": "/workflow/start-dynamic-workflow"
+    }
+  ],
+  "showClassificationSchedule":false,
+  "isArchive":true,
+  "isPrintEnabled": false,
+  "mainPrefix": "digi",
+  "showCreateSite": true,
+  "topSecretDocumentTypes":["agcdoc:Warkah"],
+  "archiveGroupName":"[AGC]-archive",
+  "GroupName":"[AGC]-AFD-Unit-IT",
+  "sessiontimeout_mins_agc": 15,
+  "version_disable_record": true,
+  "version_enable_record": true,
+  "LEGISLATIVE_DOCUMENT":"agc:ldddocument",
+  "Civil_Division_Id": "agc:litigationdebtrecovery",
+  "Criminal_Justice_Division_Id":"agc:investigationpaper",
+  "CommunicationStrategyDivision": "COMMUNICATIONS AND STRATEGY DIVISION",
+  "Civil_Division_List":["cm:name"],
+  "Criminal_Justice_Division_List": ["cm:name"],
+  "Edit_HideUpload_Properties": [],
+  "Edit_Hide_Properties": [],
+  "Edit_prop_load_disable" :[],
+  "digiDemo_aspects": [
+    "dod:dod5015record"
+  ],
+  "default_file_aspect":[],
+  "SITEMANAGER":{
+    "permissionName":"SiteManager",
+    "grp":"SiteManager",
+    "permissionType":"Locally Set",
+    "permissionValue":["Read", "Write", "Update", "Delete"]
+  },
+  "plugins": {
+    "aosPlugin": true,
+    "contentService": true,
+    "folderRules": true
+  },
+  "archive_unit_group_sites":["sg-office","ag-office-dev","ag-office","bruipo","civil-division","communications-and-strategy-division","international-affairs-division","law-library-unit","legislative-drafting-division"],
+  "focalPersonSites":["administration-and-finance-division","ag-office","civil-division","criminal-justice-division"],
+  "cDCjdFolderSite":["criminal-justice-division","civil-division"],
+  "civilDivision_firstLevel_folders":["DEBT RECOVERY","INCOMING DOCUMENTS","ADVISORY"],
+  "criminalJusticeDivision_firstLevel_folders":["INVESTIGATION PAPER","ADVISORY"],
+  "DYNAMIC-COLLABORATION-WORKFLOW":"dynamic-collaboration-workflow",
+  "fileAssociation": [
+    {
+      "label": "Response Document link",
+      "assoType": "digi:responselink",
+      "disabled": false
+    },
+    {
+      "label": "Translation Document link",
+      "assoType": "digi:translationlink",
+      "disabled": false
+    },
+    {
+      "label": "Annexure Document link",
+      "assoType": "digi:annexurelink",
+      "disabled": false
+    },
+    {
+      "label": "Others",
+      "assoType": "digi:otherLinkedDocument",
+      "disabled": false
+    }
+  ],
+  "folderAssociation": [
+    {
+      "label": "Related Case",
+      "assoType": "digi:relatedCase",
+      "disabled": false
+    },
+    {
+      "label": "Others",
+      "assoType": "digi:otherLinkedFolder",
+      "disabled": false
+    }
+  ],
+  "MY-ANALYTICS-WORKFLOW-PROCESSES-KEYS":{
+    "APPLICATION-FOR-TABUNG-BUDGET-FORM-B":"ApplicationforTabungBudget-FormB",
+    "APPLICATION-FOR-WELFARE-DONATION":"ApplicationforWelfareDonation",
+    "BOOK-SUGGESTION-WORKFLOW":"Process_Book-Suggestion-Workflow",
+    "DAMAGE-COMPLAINT-WORKFLOW":"DamageComplaintWorkflow",
+    "DYNAMIC-COLLABORATION-WORKFLOW":"dynamic-collaboration-workflow",
+    "ICT-UNIT-REQUEST-WORKFLOW":"ICTUnitRequestForm",
+    "PROCUREMENT":"Process_sid"
+  },
+  "MY-ANALYTICS-WORKFLOW-PROCESSES-OPTIONS":{
+    "DEFAULT":[
+      { "label": "APP.MY-ANALYTICS.ALL", "value": "All" },
+      { "label": "APP.MY-ANALYTICS.ACKNOWLEGDE", "value": "Acknowledge" },
+      { "label": "APP.MY-ANALYTICS.APPROVE", "value": "APProve" },
+      { "label": "APP.MY-ANALYTICS.DELEGATE", "value": "Assign" },
+      { "label": "APP.MY-ANALYTICS.IN_PROGRESS", "value": "In Progress" },
+      { "label": "APP.MY-ANALYTICS.ON_HOLD", "value": "onHold" },
+      { "label": "APP.MY-ANALYTICS.REJECT", "value": "reject" }
+    ],
+    "BOOK-SUGGESTION-WORKFLOW":[
+        { "label": "APP.MY-ANALYTICS.ALL", "value": "All" },
+        { "label": "APP.MY-ANALYTICS.ACKNOWLEGDE", "value": "Acknowledge" },
+        { "label": "APP.MY-ANALYTICS.APPROVE", "value": "Approve" },
+        { "label": "APP.MY-ANALYTICS.FORFURTHER", "value": "For Further Action" },
+        { "label": "APP.MY-ANALYTICS.IN_PROGRESS", "value": "In Progress" },
+        { "label": "APP.MY-ANALYTICS.PASSEDUEDATE", "value": "Passed Due Date" },
+        { "label": "APP.MY-ANALYTICS.REJECT", "value": "reject" },
+        { "label": "APP.MY-ANALYTICS.SUPPORT_LABEL", "value": "Support" }
+    ],
+    "DAMAGE-COMPLAINT-WORKFLOW":[
+      { "label": "APP.MY-ANALYTICS.ALL", "value": "All" },
+      { "label": "APP.MY-ANALYTICS.ACKNOWLEGDE", "value": "Acknowledge" },
+      { "label": "APP.MY-ANALYTICS.IN_PROGRESS", "value": "In Progress" }
+    ],
+    "ICT-UNIT-REQUEST-WORKFLOW":[
+      { "label": "APP.MY-ANALYTICS.ALL", "value": "All" },
+      { "label": "APP.MY-ANALYTICS.APPROVE", "value": "Approve" },
+      { "label": "APP.MY-ANALYTICS.COMPLETE", "value": "complete" },
+      { "label": "APP.MY-ANALYTICS.IN_PROGRESS", "value": "In Progress" },
+      { "label": "APP.MY-ANALYTICS.ON_HOLD", "value": "onHold" },
+      { "label": "APP.MY-ANALYTICS.REJECT", "value": "reject" }
+    ],
+    "APPLICATION-FOR-WELFARE-DONATION":[
+      { "label": "APP.MY-ANALYTICS.ALL", "value": "All" },
+      { "label": "APP.MY-ANALYTICS.ACKNOWLEGDE", "value": "Acknowledge" },
+      { "label": "APP.MY-ANALYTICS.APPROVE", "value": "Approve" },
+      { "label": "APP.MY-ANALYTICS.ENDORSED", "value": "Endorse" },
+      { "label": "APP.MY-ANALYTICS.FOR_OPINION", "value": "For Opinion" },
+      { "label": "APP.MY-ANALYTICS.IN_PROGRESS", "value": "In Progress" },
+      { "label": "APP.MY-ANALYTICS.QUERIED", "value": "Query" },
+      { "label": "APP.MY-ANALYTICS.RECOMMENDED", "value": "Recommend" },
+      { "label": "APP.MY-ANALYTICS.REJECT", "value": "Reject" },
+      { "label": "APP.MY-ANALYTICS.SIGNED", "value": "Sign" }
+    ],
+    "APPLICATION-FOR-TABUNG-BUDGET-FORM-B":[
+      { "label": "APP.MY-ANALYTICS.ALL", "value": "All" },
+      { "label": "APP.MY-ANALYTICS.ACKNOWLEGDE", "value": "Acknowledge" },
+      { "label": "APP.MY-ANALYTICS.APPROVE", "value": "Approve" },
+      { "label": "APP.MY-ANALYTICS.ENDORSED", "value": "Endorse" },
+      { "label": "APP.MY-ANALYTICS.FOR_OPINION", "value": "For Opinion" },
+      { "label": "APP.MY-ANALYTICS.IN_PROGRESS", "value": "In Progress" },
+      { "label": "APP.MY-ANALYTICS.QUERIED", "value": "Query" },
+      { "label": "APP.MY-ANALYTICS.RECOMMENDED", "value": "Recommend" },
+      { "label": "APP.MY-ANALYTICS.REJECT", "value": "Reject" },
+      { "label": "APP.MY-ANALYTICS.SIGNED", "value": "Sign" }
+    ],
+    "PROCUREMENT":[
+      { "label": "APP.MY-ANALYTICS.ALL", "value": "All" },
+      { "label": "APP.MY-ANALYTICS.ACKNOWLEGDE", "value": "Acknowledge" },
+       { "label": "APP.MY-ANALYTICS.APPROVE", "value": "Approve" },
+
+      { "label": "APP.MY-ANALYTICS.ENDORSED", "value": "Endorse" },
+      { "label": "APP.MY-ANALYTICS.FOR_ACTION_COMMITTEE", "value": "Committee" },
+       { "label": "APP.MY-ANALYTICS.FOR_ACTION_CHIEF_CLERK", "value": "Chiefclerk" },
+      { "label": "APP.MY-ANALYTICS.IN_PROGRESS", "value": "In Progress" },
+      { "label": "APP.MY-ANALYTICS.QUERIED", "value": "Query" },
+      { "label": "APP.MY-ANALYTICS.REJECT", "value": "Reject" },
+      { "label": "APP.MY-ANALYTICS.SIGNED", "value": "Sign" }
+    ],
+    "OTHERS":[
+      { "label": "APP.MY-ANALYTICS.ALL", "value": "All" },
+      { "label": "APP.MY-ANALYTICS.ACKNOWLEGDE", "value": "Acknowledge" },
+      { "label": "APP.MY-ANALYTICS.APPROVE", "value": "Approve" },
+      { "label": "APP.MY-ANALYTICS.DELEGATE", "value": "Assign" },
+      { "label": "APP.MY-ANALYTICS.FOR_CIRCULATE", "value": "For Circulation" },
+      { "label": "APP.MY-ANALYTICS.IN_PROGRESS", "value": "In Progress" },
+      { "label": "APP.MY-ANALYTICS.NOT-YET-STARTED", "value": "notyetstarted" },
+      { "label": "APP.MY-ANALYTICS.ON_HOLD", "value": "onHold" },
+      { "label": "APP.MY-ANALYTICS.RE_ASSIGN", "value": "Re-assign" },
+      { "label": "APP.MY-ANALYTICS.REJECT", "value": "reject" },
+      { "label": "APP.MY-ANALYTICS.RE_SUBMIT", "value": "Resubmit" }
+    ]
+  },
+  "DEFAULT_PROPERTIES": [
+    {
+      "dataType": "d:text",
+      "name": "cm:title",
+      "title": "APP.UPLOAD_FILES_DW.DEFAULT_TITLE",
+      "mandatory": false,
+      "Constraints": {
+        "minLength": 1,
+        "maxLength": 256
+      }
+    },
+    {
+      "dataType": "d:text",
+      "name": "cm:description",
+      "title": "APP.UPLOAD_FILES_DW.DEFAULT_DESCRIPTION",
+      "mandatory": false
+    }
+  ],
+  "oauth2": {
+      "host": "https://alfresco-demo.crestsolution.com:8080/auth/realms/alfresco",
+      "clientId": "alfresco-client",
+      "scope": "openid",
+      "secret": "",
+      "implicitFlow": true,
+      "redirectUri": "/",
+      "requireHttps": false,
+      "redirectUriLogout": "/",
+      "silentLogin": true ,
+      "publicUrls": ["**/preview/s/*", "**/settings", "**/blank", "**/guest-access/**"],
+      "redirectSilentIframeUri": "/assets/silent-refresh.html"
+
+  },
+  "documentStatuses":[
+    "1-Draft",
+    "2-Received",
+    "3-In-Review",
+    "4-Approved",
+    "5-Rejected",
+    "6-Pending Signature",
+    "7-Signed",
+    "8-Adopted",
+    "9-Returned",
+    "10-Pending Instruction",
+    "11-For Circulation",
+    "12-For Comment",
+    "13-For Consideration",
+    "14-Completed",
+    "15-Keep in View (KIV)",
+    "16-Resolved"
+  ],
+  "archivalProcessStatus":["Closed","Closed and Settled","Completed"],
+  "folderStatusProperties":[],
+  "documentStatusProperties":[],
+  "agcModels":[{
+    "uri":"http://www.alfresco.org/model/content/1.0",
+    "prefix":"cm"
+  },{
+    "uri":"com.agc",
+    "prefix":"agc"
+  },{
+    "uri":"http://www.agc.com/model/custom/document/1.0",
+    "prefix":"agcdoc"
+  }],
+  "appRouteModules": [
+    {
+      "id": 1,
+      "name": "Dashboard",
+      "route": "/dashboard"
+    },
+    {
+      "id": 3,
+      "name": "Documents",
+      "route": "/documents"
+    },
+    {
+      "id": 2,
+      "name": "Tasks",
+      "route": "/workflow"
+    },
+    {
+      "id": 4,
+      "name": "Records",
+      "route": "/records"
+    },
+    {
+      "id": 5,
+      "name": "My Profile",
+      "route": "/my-profile"
+    },
+    {
+      "id": 6,
+      "name": "Change Password",
+      "route": "/change-password"
+    },
+    {
+      "id": 6,
+      "name": "Search Result",
+      "route": "/search"
+    }
+  ],
+  "adf-viewer": { "pdf-viewer-scaling": 90 },
+  "locale": "en",
+  "current-dashboard-version":"3.0",
+  "application": {
+    "name": "Digi Works",
+    "version": "2.2.0",
+    "logo": "assets/images/svg/digiworks-logo.svg",
+    "headerImagePath": "assets/images/mastHead-bg-shapesPattern.svg",
+    "copyright": "APP.COPYRIGHT"
+  },
+  "digital-signature": {
+    "jtc-customer": "sign1",
+    "jtc-officer": "sign1",
+    "jtc-signatory": "sign2"
+  },
+  "viewer.maxRetries": 1,
+  "viewer-type": "aev",
+  "sharedLinkDateTimePickerType": "date",
+  "headerColor": "#ffffff",
+  "pagination": {
+    "size": 25,
+    "supportedPageSizes": [25, 50, 100]
+  },
+  "files": {
+    "excluded": [".DS_Store", "desktop.ini", "Thumbs.db", ".git"],
+    "match-options": {
+      "nocase": true
+    }
+  },
+  "dateValues": {
+    "defaultDateFormat": "mediumDate",
+    "defaultDateTimeFormat": "MMM d, y, h:mm",
+    "defaultLocale": "en"
+  },
+  "adf-version-manager": {
+    "allowComments": true,
+    "allowDownload": true
+  },
+  "sideNav": {
+    "preserveState": true,
+    "expandedSidenav": true
+  },
+  "dashboard-components": [
+    {
+      "key": "digi-favorites",
+      "label": "APP.DASHBOARD-WIDGET.MYFAVORITES",
+      "disable": false,
+      "icon": "favourites_widget_icon"
+    },
+    {
+      "key": "digi-recent-file",
+      "label": "APP.DASHBOARD-WIDGET.RECENTFILES",
+      "disable": false,
+      "icon": "recent_widget_icon"
+    },
+    {
+      "key": "digi-dashboard-activity",
+      "label": "APP.DASHBOARD-WIDGET.MYACTIVITIES",
+      "disable": false,
+      "icon": "activity_widget_icon"
+    },
+    {
+      "key": "digi-dashboard-tasksummary",
+      "label": "APP.DASHBOARD-WIDGET.TASKSUMMARY",
+      "disable": false,
+      "icon": "task_widget_icon"
+    }
+  ],
+  "languages": [
+    {
+      "key": "en",
+      "label": "English",
+      "img": "./assets/images/language/US.png",
+      "width": "150px"
+    },
+    {
+      "key": "vi-VN",
+      "label": "Vietnamese",
+      "img": "./assets/images/language/vietnamese.png",
+      "width": "150px"
+    },
+    {
+      "key": "ms",
+      "label": "Bahasa Melayu",
+      "img": "./assets/images/language/malaysia.png",
+      "width": "150px"
+    },
+    {
+      "key": "fr",
+      "label": "French",
+      "img": "./assets/images/language/french.png",
+      "width": "150px"
+    },
+    {
+      "key": "ar",
+      "label": "Arabic",
+      "img": "./assets/images/language/arabic.png",
+      "width": "150px"
+    },
+    {
+      "key": "id",
+      "label": "Bahasa Indonesia",
+      "img": "./assets/images/language/indonesia_flag.png",
+      "width": "150px"
+    },
+    {
+      "key": "zh-CN",
+      "label": "Simplified Chinese",
+      "img": "./assets/images/language/chinese.png",
+      "width": "150px"
+    },
+    {
+      "key": "da",
+      "label": "Danish",
+      "img": "./assets/images/language/danish.png",
+      "width": "150px"
+    },
+    {
+      "key": "ko",
+      "label": "Korean",
+      "img": "./assets/images/language/korean.png",
+      "width": "150px"
+    },
+    {
+      "key": "nl",
+      "label": "Dutch",
+      "img": "./assets/images/language/Dutch.png",
+      "width": "150px"
+    },
+    {
+      "key": "es",
+      "label": "Spanish",
+      "img": "./assets/images/language/Spanish.png",
+      "width": "150px"
+    },
+    {
+      "key": "zh-TW",
+      "label": "Traditional Chinese",
+      "img": "./assets/images/language/chinese.png",
+      "width": "150px"
+    },
+    {
+      "key": "ja",
+      "label": "Japanese",
+      "img": "./assets/images/language/japanese.png",
+      "width": "150px"
+    },
+    {
+      "key": "de",
+      "label": "German",
+      "img": "./assets/images/language/german.png",
+      "width": "150px"
+    },
+    {
+      "key": "it",
+      "label": "Italian",
+      "img": "./assets/images/language/italy.png",
+      "width": "150px"
+    },
+    {
+      "key": "nb",
+      "label": "Norwegian",
+      "img": "./assets/images/language/Flag-Norway.svg",
+      "width": "150px"
+    },
+    {
+      "key": "pl",
+      "label": "Polish",
+      "img": "./assets/images/language/poland flag.svg",
+      "width": "150px"
+    },
+    {
+      "key": "pt-BR",
+      "label": "Portuguese",
+      "img": "./assets/images/language/Flag-Brazil.svg",
+      "width": "150px"
+    },
+    {
+      "key": "ru",
+      "label": "Russian",
+      "img": "./assets/images/language/Flag-Russia.svg",
+      "width": "150px"
+    },
+    {
+      "key": "sv",
+      "label": "Swedish",
+      "img": "./assets/images/language/swedan flag.svg",
+      "width": "150px"
+    },
+    {
+      "key": "fil",
+      "label": "Tagalog",
+      "img": "./assets/images/language/Tagalog.png",
+      "width": "150px"
+    }
+  ],
+  "content-metadata": {
+    "presets": {
+      "custom": [
+        {
+          "includeAll": true,
+          "exclude": [
+            "rn:renditioned",
+            "cm:versionable",
+            "cm:auditable",
+            "cm:thumbnailModification",
+            "cm:content",
+            "cm:author",
+            "cm:titled",
+            "cm:generalclassifiable",
+            "cm:taggable",
+            "dp:restrictable",
+            "fm:commentsRollup",
+            "qshare:shared",
+            "exif:exif",
+            "cm:effectivity",
+            "cm:emailed",
+            "cm:likesRatingSchemeRollups",
+            "cm:lockable",
+            "cm:ownable"
+          ]
+        },
+        {
+          "title": "APP.CONTENT_METADATA.EXIF_GROUP_TITLE",
+          "items": [
+            {
+              "aspect": "exif:exif",
+              "properties": [
+                "exif:pixelXDimension",
+                "exif:pixelYDimension",
+                "exif:dateTimeOriginal",
+                "exif:exposureTime",
+                "exif:fNumber",
+                "exif:flash",
+                "exif:focalLength",
+                "exif:isoSpeedRatings",
+                "exif:orientation",
+                "exif:manufacturer",
+                "exif:model",
+                "exif:software"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "APP.CONTENT_METADATA.EFFECTIVITY_GROUP_TITLE",
+          "items": [
+            {
+              "aspect": "cm:effectivity",
+              "properties": ["cm:from", "cm:to"]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "search": {
+    "filterWithContains": true,
+    "aca:fields": ["cm:name", "cm:title", "cm:description", "TEXT", "EXISTS"],
+    "include": ["path", "allowableOperations", "aspectNames", "properties","permissions"],
+    "categories": [
+      {
+        "id": "contractdate",
+        "name": "SEARCH.FACET_FIELDS.CONTRACT_DATE",
+        "enabled": true,
+        "component": {
+            "selector": "date-range",
+            "settings": {
+              "field": "corporate:contractdate"
+            }
+        }
+    },
+    {
+      "id": "invoicedate",
+      "name": "SEARCH.FACET_FIELDS.INVOICE_DATE",
+      "enabled": true,
+      "component": {
+          "selector": "date-range",
+          "settings": {
+            "field": "corporate:invoicedate"
+          }
+      }
+    },
+    {
+      "id": "expirydate",
+      "name": "SEARCH.FACET_FIELDS.EXPIRY_DATE",
+      "enabled": true,
+      "component": {
+          "selector": "date-range",
+          "settings": {
+            "field": "corporate:expirydate"
+          }
+      }
+    }
+    ],
+    "sorting": {
+      "options": [
+        {
+          "key": "score",
+          "label": "SEARCH.SORT.RELEVANCE",
+          "type": "FIELD",
+          "field": "score",
+          "ascending": false
+        },
+        {
+          "key": "name",
+          "label": "SEARCH.SORT.FILENAME",
+          "type": "FIELD",
+          "field": "cm:name",
+          "ascending": true
+        },
+        {
+          "key": "title",
+          "label": "SEARCH.SORT.TITLE",
+          "type": "FIELD",
+          "field": "cm:title",
+          "ascending": true
+        },
+        {
+          "key": "corporate:contractdate",
+          "label": "APP.DOCUMENT_LIST.COLUMNS.CONTRACT_DATE",
+          "type": "FIELD",
+          "field": "corporate:contractdate",
+          "ascending": true
+        },
+        {
+          "key": "corporate:invoicedate",
+          "label": "APP.DOCUMENT_LIST.COLUMNS.INVOICE_DATE",
+          "type": "FIELD",
+          "field": "corporate:invoicedate",
+          "ascending": true
+        },
+        {
+          "key": "corporate:expirydate",
+          "label": "APP.DOCUMENT_LIST.COLUMNS.EXPIRY_DATE",
+          "type": "FIELD",
+          "field": "corporate:expirydate",
+          "ascending": true
+        },
+
+        {
+          "key": "corporate:invociesuppliername",
+          "label": "APP.DOCUMENT_LIST.COLUMNS.INVOICE_SUPPLIER_NAME",
+          "type": "FIELD",
+          "field": "corporate:invociesuppliername",
+          "ascending": true
+        },
+        {
+          "key": "corporate:contractsuppliername",
+          "label": "APP.DOCUMENT_LIST.COLUMNS.CONTRACT_SUPPLIER_NAME",
+          "type": "FIELD",
+          "field": "corporate:contractsuppliername",
+          "ascending": true
+        },
+        {
+          "key": "corporate:invoicenumber",
+          "label": "APP.DOCUMENT_LIST.COLUMNS.INVOICE_NUMBER",
+          "type": "FIELD",
+          "field": "corporate:invoicenumber",
+          "ascending": true
+        },
+        {
+          "key": "modifier",
+          "label": "SEARCH.SORT.MODIFIER",
+          "type": "FIELD",
+          "field": "cm:modifier",
+          "ascending": true
+        },
+        {
+          "key": "created",
+          "label": "SEARCH.SORT.CREATE_DATE",
+          "type": "FIELD",
+          "field": "cm:created",
+          "ascending": true
+        },
+        {
+          "key": "content.sizeInBytes",
+          "label": "SEARCH.SORT.SIZE",
+          "type": "FIELD",
+          "field": "content.size",
+          "ascending": true
+        }
+      ],
+      "defaults": [
+        {
+          "key": "score",
+          "type": "FIELD",
+          "field": "score",
+          "ascending": false
+        }
+      ]
+    },
+    "aca:triggeredOnChange": false,
+    "resetButton": true,
+    "filterQueries": [
+      { "query": "+TYPE:'cm:folder' OR +TYPE:'cm:content'" },
+      {
+        "query": "-TYPE:'bpm:package' AND -TYPE:'cm:systemfolder' AND -TYPE:'cm:thumbnail' AND -TYPE:'cm:failedThumbnail' AND -TYPE:'cm:rating'  AND +PATH:'/app:company_home/st:sites//*'"
+      },
+      { "query": "-cm:creator:System AND -QNAME:comment" },
+      {
+        "query": "-TYPE:'st:site' AND -ASPECT:'st:siteContainer' AND -ASPECT:'sys:hidden'"
+      },
+      {
+        "query": "-TYPE:'dl:dataList' AND -TYPE:'dl:todoList' AND -TYPE:'dl:issue'"
+      },
+      { "query": "-TYPE:'fm:topic' AND -TYPE:'fm:post'" },
+      { "query": "-TYPE:'lnk:link'" },
+      { "query": "-PNAME:'0/wiki'" },
+      { "query": "-SITE:'static-workflow-temporary-folder'"}
+    ],
+    "facetFields": {
+      "expanded": false,
+      "fields": [
+        { "field": "content.mimetype", "mincount": 1, "label": "Type" },
+        { "field": "content.size", "mincount": 1, "label": "File Size" },
+        { "field": "creator", "mincount": 1, "label": "Creator" },
+        { "field": "modifier", "mincount": 1, "label": "Modifier" },
+        {
+          "mincount": 1,
+          "field": "corporate:invoicenumber",
+          "label": "SEARCH.FACET_FIELDS.INVOICE_NUMBER"
+        },
+        {
+          "mincount": 1,
+          "field": "corporate:invoiceamount",
+          "label": "SEARCH.FACET_FIELDS.INVOICE_AMOUNT"
+        },
+        {
+          "mincount": 1,
+          "field": "corporate:invociesuppliername",
+          "label": "SEARCH.FACET_FIELDS.INVOICE_SUPPLIER_NAME"
+        },
+        {
+          "mincount": 1,
+          "field": "corporate:contractsuppliername",
+          "label": "SEARCH.FACET_FIELDS.CONTRACT_SUPPLIER_NAME"
+        },
+        {
+          "mincount": 1,
+          "field": "corporate:contractamount",
+          "label": "SEARCH.FACET_FIELDS.CONTRACT_AMOUNT"
+        },
+        {
+          "mincount": 1,
+          "field": "digi:status",
+          "label": "SEARCH.FACET_FIELDS.STATUS"
+        },
+        {
+          "mincount": 1,
+          "field": "digi:documentstatusmodifiedby",
+          "label": "SEARCH.FACET_FIELDS.MODIFIED_BY"
+        },
+        {
+          "mincount": 1,
+          "field": "digi:doccombuserstatus",
+          "label": "SEARCH.FACET_FIELDS.MODIFIED_BY_STATUS"
+        }
+      ]
+    }
+  },
+  "search-headers": {
+    "filterWithContains": true,
+    "app:fields": ["cm:name", "cm:title", "cm:description", "TEXT", "EXISTS"],
+    "categories": [
+      {
+        "id": "queryName",
+        "name": "SEARCH.SEARCH_HEADER.FILTERS.NAME.TITLE",
+        "columnKey": "name",
+        "enabled": true,
+        "component": {
+          "selector": "text",
+          "settings": {
+            "pattern": "cm:name:'(.*?)'",
+            "field": "cm:name",
+            "placeholder": "SEARCH.SEARCH_HEADER.FILTERS.NAME.PLACEHOLDER",
+            "searchPrefix": "*",
+            "searchSuffix": "*"
+          }
+        }
+      },
+      {
+        "id": "checkList",
+        "name": "SEARCH.SEARCH_HEADER.FILTERS.TYPE.TITLE",
+        "columnKey": "$thumbnail",
+        "enabled": true,
+        "component": {
+          "selector": "check-list",
+          "settings": {
+            "pageSize": 5,
+            "operator": "OR",
+            "options": [
+              {
+                "name": "SEARCH.SEARCH_HEADER.FILTERS.TYPE.FOLDER",
+                "value": "TYPE:'cm:folder'"
+              },
+              {
+                "name": "SEARCH.SEARCH_HEADER.FILTERS.TYPE.DOCUMENT",
+                "value": "TYPE:'cm:content'"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "contentSize",
+        "name": "SEARCH.SEARCH_HEADER.FILTERS.SIZE.TITLE",
+        "columnKey": "content.sizeInBytes",
+        "enabled": true,
+        "component": {
+          "selector": "check-list",
+          "settings": {
+            "options": [
+              {
+                "name": "SEARCH.SEARCH_HEADER.FILTERS.SIZE.SMALL",
+                "value": "content.size:[0 TO 1048576> OR TYPE:'cm:folder'"
+              },
+              {
+                "name": "SEARCH.SEARCH_HEADER.FILTERS.SIZE.MEDIUM",
+                "value": "content.size:[1048576 TO 52428800] OR TYPE:'cm:folder'"
+              },
+              {
+                "name": "SEARCH.SEARCH_HEADER.FILTERS.SIZE.LARGE",
+                "value": "content.size:<52428800 TO 524288000] OR TYPE:'cm:folder'"
+              },
+              {
+                "name": "SEARCH.SEARCH_HEADER.FILTERS.SIZE.HUGE",
+                "value": "content.size:<524288000 TO MAX] OR TYPE:'cm:folder'"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "highlight": {
+      "prefix": " ",
+      "postfix": " ",
+      "mergeContiguous": true,
+      "fields": [
+        {
+          "field": "cm:title"
+        },
+        {
+          "field": "description",
+          "prefix": "(",
+          "postfix": ")"
+        }
+      ]
+    },
+    "sorting": {
+      "options": [
+        {
+          "key": "name",
+          "label": "Name",
+          "type": "FIELD",
+          "field": "cm:name",
+          "ascending": true
+        },
+        {
+          "key": "content.sizeInBytes",
+          "label": "Size",
+          "type": "FIELD",
+          "field": "content.size",
+          "ascending": true
+        },
+        {
+          "key": "createdByUser",
+          "label": "Author",
+          "type": "FIELD",
+          "field": "cm:creator",
+          "ascending": true
+        },
+        {
+          "key": "createdAt",
+          "label": "Created",
+          "type": "FIELD",
+          "field": "cm:created",
+          "ascending": true
+        },
+        {
+          "key": "modifiedAt",
+          "label": "SEARCH.SORT.MODIFIED_DATE",
+          "type": "FIELD",
+          "field": "cm:modified",
+          "ascending": true
+        },
+        {
+          "key": "modifiedByUser.displayName",
+          "label": "SEARCH.SORT.MODIFIER",
+          "type": "FIELD",
+          "field": "cm:modifier",
+          "ascending": true
+        },
+        {
+          "key": "score",
+          "label": "Relevance",
+          "type": "FIELD",
+          "field": "score",
+          "ascending": false
+        }
+      ],
+      "defaults": [
+        {
+          "key": "score",
+          "type": "FIELD",
+          "field": "score",
+          "ascending": false
+        }
+      ]
+    }
+  },
+  "content-types": {
+    "excluded": [ "cm:auditable", "sys:referenceable", "sys:localized"]
+  }
+}

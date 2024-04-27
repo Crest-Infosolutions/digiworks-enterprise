@@ -1,0 +1,299 @@
+services:
+  alfresco:
+    image: docker.crestsolution.com:8443/digiworks/alfresco:23.2.1
+    environment:
+      JAVA_TOOL_OPTIONS: >-
+        -Dencryption.keystore.type=JCEKS
+        -Dencryption.cipherAlgorithm=DESede/CBC/PKCS5Padding
+        -Dencryption.keyAlgorithm=DESede
+        -Dencryption.keystore.location=/usr/local/tomcat/shared/classes/alfresco/extension/keystore/keystore
+        -Dmetadata-keystore.password=mp6yc0UD9e
+        -Dmetadata-keystore.aliases=metadata
+        -Dmetadata-keystore.metadata.password=oKIWzVdEdA
+        -Dmetadata-keystore.metadata.algorithm=DESede
+      JAVA_OPTS: >-
+        -Ddb.driver=org.postgresql.Driver
+        -Ddb.username=alfresco
+        -Ddb.password=alfresco
+        -Ddb.url=jdbc:postgresql://postgres:5432/alfresco
+        -Dindex.subsystem.name=elasticsearch
+        -Delasticsearch.createIndexIfNotExists=true
+        -Delasticsearch.host=elasticsearch
+        -Delasticsearch.port=9200
+        -Dshare.host=localhost
+        -Dshare.port=8080
+        -Dalfresco.host=localhost
+        -Dalfresco.port=8080         
+        -Daudit.enabled=true
+        -Daudit.alfresco-access.enabled=true
+        -Daudit.alfresco-access.sub-actions.enabled=false
+        -Daudit.filter.alfresco-access.transaction.action="READ;.*"
+        -Daudit.filter.alfresco-access.transaction.type="cm:folder;cm:content;st:site;cm:person;.*"
+        -Daudit.filter.alfresco-access.default.enabled=true
+        -Daudit.filter.alfresco-access.default.user="~null;.*"
+        -Daudit.filter.alfresco-access.default.path="~/app:company_home/st:sites/cm:surf-config;~/sys:system;~/cm:categoryRoot;~/cm:multilingualRoot;/app:company_home/st:sites/.*"
+        -Daudit.filter.alfresco-access.transaction.user="~System;~null;.*"
+        -Daudit.filter.alfresco-access.transaction.path="~/sys:system/sys:authorities/.*;~/app:company_home/st:sites/cm:surf-config/.*;/app:company_home/st:sites/.*"
+        -Daos.baseUrlOverwrite=http://localhost:8080/alfresco/aos
+        -Dmessaging.broker.url="failover:(nio://activemq:61616)?timeout=3000&jms.useCompression=true"
+        -Ddeployment.method=DOCKER_COMPOSE
+        -Dtransform.service.enabled=true
+        -Dtransform.service.url=http://transform-router:8095
+        -Dsfs.url=http://shared-file-store:8099/
+        -DlocalTransform.core-aio.url=http://transform-core-aio:8090/
+        -Ddsync.service.uris=http://localhost:9090/alfresco
+        -XX:MinRAMPercentage=50
+        -XX:MaxRAMPercentage=80
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8080/alfresco/api/-default-/public/alfresco/versions/1/probes/-ready-
+      interval: 120s
+      timeout: 60s
+      retries: 3
+      start_period: 1m
+    ports:
+      - "9191:8080"
+    volumes:
+      - alf_data:/usr/local/tomcat/alf_data
+      - ./resources/alfresco-global.properties:/usr/local/tomcat/shared/classes/alfresco-global.properties
+      - ./resources/alfresco.lic:/usr/local/tomcat/shared/classes/alfresco/extension/license/alfresco.lic
+      - ./resources/TextLicense.l4j:/usr/local/tomcat/shared/classes/alfresco/module/com.tsgrp.opencontent/license/TextLicense.l4j
+      
+   
+
+  transform-router:
+    image: quay.io/alfresco/alfresco-transform-router:4.1.0
+    environment:
+      JAVA_OPTS: >-
+        -XX:MinRAMPercentage=50
+        -XX:MaxRAMPercentage=80
+      ACTIVEMQ_URL: nio://activemq:61616
+      CORE_AIO_URL: http://transform-core-aio:8090
+      FILE_STORE_URL: >-
+        http://shared-file-store:8099/alfresco/api/-default-/private/sfs/versions/1/file
+    ports:
+      - "8095:8095"
+    depends_on:
+      - activemq
+  transform-core-aio:
+    image: alfresco/alfresco-transform-core-aio:5.1.0
+    environment:
+      JAVA_OPTS: >-
+        -XX:MinRAMPercentage=50
+        -XX:MaxRAMPercentage=80
+      ACTIVEMQ_URL: nio://activemq:61616
+      FILE_STORE_URL: >-
+        http://shared-file-store:8099/alfresco/api/-default-/private/sfs/versions/1/file
+    ports:
+      - "8090:8090"
+    depends_on:
+      - activemq
+  shared-file-store:
+    image: quay.io/alfresco/alfresco-shared-file-store:4.1.0
+    environment:
+      JAVA_OPTS: >-
+        -XX:MinRAMPercentage=50
+        -XX:MaxRAMPercentage=80
+      scheduler.content.age.millis: 86400000
+      scheduler.cleanup.interval: 86400000
+    ports:
+      - "8099:8099"
+    volumes:
+      - shared-file-store-volume:/tmp/Alfresco/sfs
+  share:
+    image: docker.crestsolution.com:8443/digiworks/share:23.2.1
+    environment:
+      REPO_HOST: "alfresco"
+      REPO_PORT: "8080"
+      JAVA_OPTS: >-
+        -XX:MinRAMPercentage=50
+        -XX:MaxRAMPercentage=80
+        -Dalfresco.host=localhost
+        -Dalfresco.port=8080
+        -Dalfresco.context=alfresco
+        -Dalfresco.protocol=http
+    ports:
+       - "9292:8080"
+  ooi-service:
+    image: quay.io/alfresco/alfresco-ooi-service:2.0.0
+    environment:
+       JAVA_OPTS: >-
+           -Dalfresco.base-url=http://alfresco:8080
+    ports:
+       - "9095:9095"
+  postgres:
+    image: postgres:14.4
+    environment:
+      - POSTGRES_PASSWORD=alfresco
+      - POSTGRES_USER=alfresco
+      - POSTGRES_DB=alfresco
+    command: postgres -c max_connections=300 -c log_min_messages=LOG
+    ports:
+      - "5432:5432"
+    volumes:
+      - acs-database-data:/var/lib/postgresql/data/
+    
+
+  elasticsearch:
+    image: elasticsearch:7.10.1
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    cap_add:
+      - IPC_LOCK
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
+  search:
+    image: quay.io/alfresco/alfresco-elasticsearch-live-indexing:4.0.1
+    depends_on:
+      - elasticsearch
+      - alfresco
+    environment:
+      ALFRESCO_ACCEPTED_CONTENT_MEDIA_TYPES_CACHE_BASE_URL: >-
+        http://transform-core-aio:8090/transform/config
+      ALFRESCO_SHAREDFILESTORE_BASEURL: >-
+        http://shared-file-store:8099/alfresco/api/-default-/private/sfs/versions/1/file/
+      SPRING_ACTIVEMQ_BROKERURL: nio://activemq:61616
+      SPRING_ELASTICSEARCH_REST_URIS: http://elasticsearch:9200
+  search-reindexing:
+    image: quay.io/alfresco/alfresco-elasticsearch-reindexing:4.0.1
+    restart: on-failure:10
+    environment:
+      ALFRESCO_ACCEPTED_CONTENT_MEDIA_TYPES_CACHE_BASE_URL: >-
+        http://transform-core-aio:8090/transform/config
+      SPRING_ACTIVEMQ_BROKERURL: nio://activemq:61616
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/alfresco
+      SPRING_DATASOURCE_USERNAME: alfresco
+      SPRING_DATASOURCE_PASSWORD: alfresco
+      SPRING_ELASTICSEARCH_REST_URIS: http://elasticsearch:9200
+    depends_on:
+      postgres:
+        condition: service_started
+      elasticsearch:
+        condition: service_started
+      alfresco:
+        condition: service_healthy
+  activemq:
+    image: alfresco/alfresco-activemq:5.18-jre17-rockylinux8
+    ports:
+      - "8161:8161" # Web Console
+      - "5672:5672" # AMQP
+      - "61616:61616" # OpenWire
+      - "61613:61613" # STOMP
+
+  digiworks-enterprise:
+    image: docker.crestsolution.com:8443/digiworks/digiworks:6.1
+    environment:
+      APP_CONFIG_ECM_HOST: "http://localhost:8080"
+      APP_CONFIG_BPM_HOST: "http://localhost:8080"
+      APP_CONFIG_PROVIDER: "ALL"
+      APP_CONFIG_AUTH_TYPE: "BASIC"
+      APP_CONFIG_OAUTH2_CLIENTID: "alfresco-client"
+      APP_CONFIG_OAUTH2_SCOPE: "\"openid\""
+      APP_CONFIG_OAUTH2_SECRET: "\"\""
+      APP_CONFIG_OAUTH2_IMPLICIT_FLOW: "true"
+      APP_CONFIG_OAUTH2_REDIRECT_LOGIN: "/"
+      APP_CONFIG_OAUTH2_REDIRECT_LOGOUT: "/"
+      APP_CONFIG_OAUTH2_REQUIRE_HTTPS: "false"
+      APP_CONFIG_OAUTH2_SILENT_LOGIN: "true"
+      APP_CONFIG_OAUTH2_HOST: ""
+      APP_CONFIG_AOS_HOST: "http://localhost:8080/alfresco/aos"
+      APP_CONFIG_BASE_DOCUMENT_SHARE_URL: "http://localhost:8080/digiworks-enterprise/#/preview/s/"
+      APP_CONFIG_BASE_FOLDER_SHARE_URL: "http://localhost:8080/digiworks-enterprise/#/guest-access/"
+      APP_CONFIG_AEV_ENDPOINTS: "http://localhost:8080/OpenAnnotate"
+      APP_CONFIG_AEV_ENDPOINTS_VIDEO: "http://localhost:8080/OpenAnnotateVideo" 
+      NGINX_DIR: "/usr/share/nginx/html/digiworks-enterprise"
+    depends_on:
+      - alfresco
+      - process
+      
+  process:
+    image: docker.crestsolution.com:8443/digiworks/aps-activiti:24.1.0
+    environment:
+      JAVA_OPTS: >-
+        -Ddb.driver=org.postgresql.Driver
+        -Ddb.username=alfresco
+
+    volumes:
+      - aps_data:/usr/local/data
+      - ./resources/activiti-app.properties:/usr/local/tomcat/lib/activiti-app.properties
+      
+    ports:
+      - 9080:8080
+    depends_on:
+      - postgres
+      - alfresco
+      - postgresaps
+      - processadmin 
+
+  processadmin:
+    image: docker.crestsolution.com:8443/digiworks/aps-admin:24.1.0
+    ports:
+      - 8081:8080
+    depends_on:
+      - postgresadmin
+    volumes:
+     - ./resources/activiti-admin.properties:/usr/local/tomcat/lib/activiti-admin.properties
+
+  postgresaps:
+    image: postgres:16.2
+    ports:
+      - 5433:5433
+    environment:
+      POSTGRES_DB: activiti
+      POSTGRES_USER: alfresco
+      POSTGRES_PASSWORD: alfresco
+    command: -p 5433
+    volumes:
+      - aps-database-data:/var/lib/postgresql/data/
+
+  postgresadmin:
+    image: postgres:16.2
+    ports:
+      - 5434:5434
+    environment:
+      POSTGRES_DB: activiti-admin
+      POSTGRES_USER: alfresco
+      POSTGRES_PASSWORD: alfresco
+    command: -p 5434
+    volumes:
+      - aps-admin-database-data:/var/lib/postgresql/data/
+  proxy:
+    image: nginx
+    ports:
+      - "8080:8080"
+    depends_on:
+      - digiworks-enterprise
+      - alfresco
+      - share
+      - process
+      - postgresadmin
+    volumes:
+      - ./resources/nginx.conf:/etc/nginx/nginx.conf
+     # - ./resources/server.key:/etc/nginx/certs/server.key
+     # - ./resources/server.crt:/etc/nginx/certs/server.crt
+volumes:
+  aps_data:
+  esdata:
+  alf_data:
+  acs-database-data: 
+  aps-admin-database-data:
+  aps-database-data:
+  shared-file-store-volume:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
