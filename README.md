@@ -15,8 +15,8 @@ This project contains the code for running Digiworks-Enterprise with <a href="ht
 <ul>
 Docker Compose is included as part of some Docker installers. If it’s not part of your installation, then install it separately after you’ve installed Docker.
 </ul></li>
-<li> Access to Quay
-<ul> Alfresco customers can request Quay.io credentials by logging a ticket at <a href="https://support.alfresco.com/"> Alfresco Support</a>. These credentials are required to pull private (Enterprise-only) Docker images from Quay.io.
+<li> Install Alfresco Digital Business Platform
+<ul> Alfresco Enterprise customers can request for Quay.io credentials by creating a support ticket at <a href="https://support.alfresco.com/"> Alfresco Support</a>. These credentials are required to pull private (Enterprise-only) Docker images from Quay.io.
 </ul>
 </li>
 <li> Access to DigiWorks Container Images (compatible with Alfresco Digital Business platform)
