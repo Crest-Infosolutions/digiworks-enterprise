@@ -1,4 +1,8 @@
-# Digiworks-Enterprise
+# DigiWorks-Enterprise
+
+DigiWorks Enterprise is the Modern, Responsive and Multi-lingual User Interface for Alfresco Digital Business Platform based on Alfresco Application Development Framework (ADF). 
+
+Compatible with Alfresco Content Services (ACS), Alfresco Governance Services (AGS) and Alfresco Process Services (APS), DigiWorks provides a Modern alternative user interface for Alfresco Share and Activiti App users.
 
 This project contains the code for running Digiworks-Enterprise with <a href="https://docs.docker.com/get-started/overview/"> Docker</a> using <a href= "https://docs.docker.com/compose"> Docker Compose</a>.
 
@@ -16,16 +20,16 @@ This project contains the code for running Digiworks-Enterprise with <a href="ht
 Docker Compose is included as part of some Docker installers. If it’s not part of your installation, then install it separately after you’ve installed Docker.
 </ul></li>
 <li> Install Alfresco Digital Business Platform
-<ul> Alfresco Enterprise customers can request for Quay.io credentials by creating a support ticket at <a href="https://support.alfresco.com/"> Alfresco Support</a>. These credentials are required to pull private (Enterprise-only) Docker images from Quay.io.
+<ul> Alfresco Enterprise customers can request for <a href="https://quay.io/"> Quay.io</a> credentials by creating a support ticket at <a href="https://support.alfresco.com/"> Alfresco Support</a>. These credentials are required to pull private (Enterprise-only) Docker images from Quay.io.
 </ul>
 </li>
 <li> Access to DigiWorks Container Images (compatible with Alfresco Digital Business platform)
 <ul>
-You can request for Alfresco Container Images (customised by Crest) by reaching out to sales@crestsolution.com, These credentials are required to pull  DigiWorks related changes.
+You can request for DigiWorks Container Images (customised by Crest) by reaching out to sales@crestsolution.com, These credentials are required to pull  DigiWorks related changes.
 </ul></li></ol>
 
 
-## Technical Stack
+## Technical Stack Prerequisite
 
 <ol>
 <li>
@@ -47,7 +51,7 @@ Allfresco Development Framework v6.10.
 Angular v14.0
 </li>
 <li>
-Alfresco Enterprise Viewer v4.0.7637.
+Alfresco Enterprise Viewer v4.0.7637 or Snowbound VirtualViewer® / Accusoft PrizmDoc® 5.x.
 </li>
 </ol>
 
