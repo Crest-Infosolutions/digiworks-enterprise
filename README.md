@@ -1,6 +1,6 @@
 # Digiworks-Enterprise
 
-This project contains the code for running Digiworks-Enterprise with <a href="https://docs.docker.com/get-started"> Docker</a> using <a href= "https://docs.docker.com/compose"> Docker Compose</a>.
+This project contains the code for running Digiworks-Enterprise with <a href="https://docs.docker.com/get-started/overview/"> Docker</a> using <a href= "https://docs.docker.com/compose"> Docker Compose</a>.
 
 
 ## Prerequisite
@@ -19,9 +19,9 @@ Docker Compose is included as part of some Docker installers. If it’s not part
 <ul> Alfresco customers can request Quay.io credentials by logging a ticket at <a href="https://support.alfresco.com/"> Alfresco Support</a>. These credentials are required to pull private (Enterprise-only) Docker images from Quay.io.
 </ul>
 </li>
-<li> Access to Crest Dockerhub
+<li> Access to DigiWorks Container Images (compatible with Alfresco Digital Business platform)
 <ul>
-You can request for crest docker hub credentials by reaching out to saikat.kumar@crestsolution.com or sales@crestsolution.com, These credentials are required to pull  digiworks related changes.
+You can request for Alfresco Container Images (customised by Crest) by reaching out to sales@crestsolution.com, These credentials are required to pull  DigiWorks related changes.
 </ul></li></ol>
 
 
