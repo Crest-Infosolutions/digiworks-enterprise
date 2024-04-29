@@ -93,7 +93,7 @@ Create a folder called <b>crestpublicLink</b> inside Repository> Data Dictionary
 <li>
 Locate the <b>documentReminder.html.ftl </b> and <b>folderReminder.html</b> files inside the documentation folder and upload them to the crestpublicLink folder.</li>
 <li>
-Navigate <a href=http://localhost:8080/digiworks-enterprise> http://localhost:8080/digiworks-enterprise </a>login with admin user and change the theme for better experience. 
+Navigate <a href=http://localhost:8080/digiworks-enterprise> http://localhost:8080/digiworks-enterprise </a>login using admin credentials and go to admin tools to update the Application Theme for personalising the user experience and updating the application logo and background image etc to meet corporate branding requirements. 
 </li>
 <li>
 Follow the user manual <b>Dynamic Collaboration Workflow_Configuration_v0.1.docx</b> to configure the Activiti-App and dynamic workflow.
