@@ -51,7 +51,7 @@ Allfresco Development Framework v6.10.
 Angular v14.0
 </li>
 <li>
-Alfresco Enterprise Viewer v4.0.7637 or Snowbound VirtualViewer® / Accusoft PrizmDoc® 5.x.
+Alfresco Enterprise Viewer v4.0.7637
 </li>
 </ol>
 
