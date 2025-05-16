@@ -1,6 +1,7 @@
 services:
   alfresco:
-    image: docker.crestsolution.com:8443/digiworks/alfresco:23.2.1
+    image:  docker.crestsolution.com:8443/digiworks/alfresco:20250515062408
+    platform: linux/amd64
     environment:
       JAVA_TOOL_OPTIONS: >-
         -Dencryption.keystore.type=JCEKS
@@ -28,12 +29,12 @@ services:
         -Daudit.alfresco-access.enabled=true
         -Daudit.alfresco-access.sub-actions.enabled=false
         -Daudit.filter.alfresco-access.transaction.action="READ;.*"
-        -Daudit.filter.alfresco-access.transaction.type="cm:folder;cm:content;st:site;cm:person;.*"
+        -Daudit.filter.alfresco-access.transaction.type="~rc:oauth2Credentials;~digi:digiconfig;~cm:person;cm:folder;cm:content;st:site;.*"
         -Daudit.filter.alfresco-access.default.enabled=true
         -Daudit.filter.alfresco-access.default.user="~null;.*"
         -Daudit.filter.alfresco-access.default.path="~/app:company_home/st:sites/cm:surf-config;~/sys:system;~/cm:categoryRoot;~/cm:multilingualRoot;/app:company_home/st:sites/.*"
         -Daudit.filter.alfresco-access.transaction.user="~System;~null;.*"
-        -Daudit.filter.alfresco-access.transaction.path="~/sys:system/sys:authorities/.*;~/app:company_home/st:sites/cm:surf-config/.*;/app:company_home/st:sites/.*"
+        -Daudit.filter.alfresco-access.transaction.path="~/app:company_home/app:dictionary/.*;~/sys:system/sys:authorities/.*;~/app:company_home/st:sites/cm:surf-config/.*;/app:company_home/st:sites/.*"
         -Daos.baseUrlOverwrite=http://localhost:8080/alfresco/aos
         -Dmessaging.broker.url="failover:(nio://activemq:61616)?timeout=3000&jms.useCompression=true"
         -Ddeployment.method=DOCKER_COMPOSE
@@ -61,11 +62,14 @@ services:
       - ./resources/alfresco-global.properties:/usr/local/tomcat/shared/classes/alfresco-global.properties
       - ./resources/alfresco.lic:/usr/local/tomcat/shared/classes/alfresco/extension/license/alfresco.lic
       - ./resources/TextLicense.l4j:/usr/local/tomcat/shared/classes/alfresco/module/com.tsgrp.opencontent/license/TextLicense.l4j
-      
-   
+      - ./resources/acs.sh:/usr/local/bin/acs.sh
+      - ./resources/legal-contract.docx:/usr/local/bin/legal-contract.docx
+      - ./resources/corporate-contract.docx:/usr/local/bin/corporate-contract.docx
+    entrypoint: ["/bin/bash", "-c", "/usr/local/bin/acs.sh & exec /usr/local/tomcat/bin/catalina.sh run"]
 
   transform-router:
-    image: quay.io/alfresco/alfresco-transform-router:4.1.0
+    image:  quay.io/alfresco/alfresco-transform-router:4.1.7
+    platform: linux/amd64
     environment:
       JAVA_OPTS: >-
         -XX:MinRAMPercentage=50
@@ -76,10 +80,20 @@ services:
         http://shared-file-store:8099/alfresco/api/-default-/private/sfs/versions/1/file
     ports:
       - "8095:8095"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8095/actuator/health"]
+      interval: 10s
+      timeout: 2s
+      retries: 3
+      start_period: 20s
     depends_on:
-      - activemq
+      activemq:
+        condition: service_healthy
+      shared-file-store:
+        condition: service_healthy
   transform-core-aio:
-    image: alfresco/alfresco-transform-core-aio:5.1.0
+    image:  quay.io/alfresco/alfresco-transform-core-aio:5.1.7
+    platform: linux/amd64
     environment:
       JAVA_OPTS: >-
         -XX:MinRAMPercentage=50
@@ -89,10 +103,20 @@ services:
         http://shared-file-store:8099/alfresco/api/-default-/private/sfs/versions/1/file
     ports:
       - "8090:8090"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8090/ready"]
+      interval: 200s
+      timeout: 20s
+      retries: 3
+      start_period: 100s
     depends_on:
-      - activemq
+      activemq:
+        condition: service_healthy
+      shared-file-store:
+        condition: service_healthy
   shared-file-store:
-    image: quay.io/alfresco/alfresco-shared-file-store:4.1.0
+    image: quay.io/alfresco/alfresco-shared-file-store:4.1.7
+    platform: linux/amd64
     environment:
       JAVA_OPTS: >-
         -XX:MinRAMPercentage=50
@@ -101,10 +125,17 @@ services:
       scheduler.cleanup.interval: 86400000
     ports:
       - "8099:8099"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8099/ready"]
+      interval: 200s
+      timeout: 20s
+      retries: 30
+      start_period: 100s
     volumes:
       - shared-file-store-volume:/tmp/Alfresco/sfs
   share:
-    image: docker.crestsolution.com:8443/digiworks/share:23.2.1
+    image: docker.crestsolution.com:8443/digiworks/share:20250515062408
+    platform: linux/amd64
     environment:
       REPO_HOST: "alfresco"
       REPO_PORT: "8080"
@@ -119,26 +150,28 @@ services:
        - "9292:8080"
   ooi-service:
     image: quay.io/alfresco/alfresco-ooi-service:2.0.0
+    platform: linux/amd64
     environment:
        JAVA_OPTS: >-
            -Dalfresco.base-url=http://alfresco:8080
     ports:
        - "9095:9095"
   postgres:
-    image: postgres:14.4
+    image: postgres:16.5
+    platform: linux/amd64
     environment:
       - POSTGRES_PASSWORD=alfresco
       - POSTGRES_USER=alfresco
       - POSTGRES_DB=alfresco
     command: postgres -c max_connections=300 -c log_min_messages=LOG
-    ports:
-      - "5432:5432"
+ #   ports:
+ #     - "5432:5432"
     volumes:
       - acs-database-data:/var/lib/postgresql/data/
     
 
   elasticsearch:
-    image: elasticsearch:7.10.1
+    image:  arm64v8/elasticsearch:8.17.6
     environment:
       - xpack.security.enabled=false
       - discovery.type=single-node
@@ -154,14 +187,18 @@ services:
     ports:
       - 9200:9200
       - 9300:9300
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s -X GET http://localhost:9200/_cluster/health?pretty | grep status | grep -q '\\(green\\|yellow\\)'"]
+      interval: 180s
+      timeout: 120s
+      retries: 3
+      start_period: 2m  
     volumes:
       - esdata:/usr/share/elasticsearch/data
 
   search:
-    image: quay.io/alfresco/alfresco-elasticsearch-live-indexing:4.0.1
-    depends_on:
-      - elasticsearch
-      - alfresco
+    image: quay.io/alfresco/alfresco-elasticsearch-live-indexing:5.0.0
+    platform: linux/amd64
     environment:
       ALFRESCO_ACCEPTED_CONTENT_MEDIA_TYPES_CACHE_BASE_URL: >-
         http://transform-core-aio:8090/transform/config
@@ -169,9 +206,17 @@ services:
         http://shared-file-store:8099/alfresco/api/-default-/private/sfs/versions/1/file/
       SPRING_ACTIVEMQ_BROKERURL: nio://activemq:61616
       SPRING_ELASTICSEARCH_REST_URIS: http://elasticsearch:9200
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      transform-core-aio:
+        condition: service_healthy
+      shared-file-store:
+        condition: service_healthy
   search-reindexing:
-    image: quay.io/alfresco/alfresco-elasticsearch-reindexing:4.0.1
+    image: quay.io/alfresco/alfresco-elasticsearch-reindexing:5.0.0
     restart: on-failure:10
+    platform: linux/amd64
     environment:
       ALFRESCO_ACCEPTED_CONTENT_MEDIA_TYPES_CACHE_BASE_URL: >-
         http://transform-core-aio:8090/transform/config
@@ -180,6 +225,8 @@ services:
       SPRING_DATASOURCE_USERNAME: alfresco
       SPRING_DATASOURCE_PASSWORD: alfresco
       SPRING_ELASTICSEARCH_REST_URIS: http://elasticsearch:9200
+    volumes:
+      - ./resources/reindex.prefixes-file.json:/opt/BOOT-INF/classes/reindex.prefixes-file.json
     depends_on:
       postgres:
         condition: service_started
@@ -194,9 +241,16 @@ services:
       - "5672:5672" # AMQP
       - "61616:61616" # OpenWire
       - "61613:61613" # STOMP
+    healthcheck:
+      test: ["CMD", "/opt/activemq/bin/activemq", "query", "--objname", "type=Broker,brokerName=*,service=Health", "|", "grep", "Good"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
 
   digiworks-enterprise:
-    image: docker.crestsolution.com:8443/digiworks/digiworks:6.1
+    image: docker.crestsolution.com:8443/digiworks/adf:20250515172926
+    platform: linux/amd64
     environment:
       APP_CONFIG_ECM_HOST: "http://localhost:8080"
       APP_CONFIG_BPM_HOST: "http://localhost:8080"
@@ -220,18 +274,111 @@ services:
     depends_on:
       - alfresco
       - process
-      
+
+  document-compare:
+    image: docker.crestsolution.com:8443/digiworks/document-compare:v5
+    depends_on:
+      - alfresco
+      - transform-router
+    platform: linux/amd64
+    environment:
+      CONTENT_SERVICE_SECURITY_BASICAUTH_USERNAME: "admin"
+      CONTENT_SERVICE_SECURITY_BASICAUTH_PASSWORD: "admin"
+      CONTENT_SERVICE_URL: "http://alfresco:8080"
+      TRANSFORM_OFFICE_URL: "http://transform-core-aio:8090/transform"
+
+
+  maria-db:
+    image: mariadb:11.7.1-rc
+    platform: linux/amd64
+    container_name: mariadb-db
+    environment:
+      MARIADB_ROOT_PASSWORD: "root"
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "alfrescoai"
+      MARIADB_DATABASE: "alfrescoai"
+    volumes:
+      - ./ai-data/mariadb_data:/var/lib/mysql
+
+  ai-scheduler-elastic:
+    image: docker.crestsolution.com:8443/digiworks-ai/ai-scheduler-elastic:v2.1.0
+    platform: linux/amd64
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      alfresco:
+        condition: service_healthy
+    volumes:
+      - shared-ai-data:/mnt/ai
+    environment:
+      JAVA_OPTS: >-
+          -Dcontent.service.url=http://alfresco:8080
+          -Dcontent.service.security.basicAuth.username=admin
+          -Dcontent.service.security.basicAuth.password=admin
+          -Delasticsearch.host=elasticsearch 
+          -Dspring.elasticsearch.uris=http://elasticsearch:9200
+          -Dspring.ai.openai.embedding.api-key=AIzaSyByR5fFi1_7pzHPeYPnodDzBj0imi0QSoM
+  
+  ai-chat-elastic:
+    image: docker.crestsolution.com:8443/digiworks-ai/ai-chat-elastic:v2.1.0
+    platform: linux/amd64
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      alfresco:
+        condition: service_healthy
+    volumes:
+      - shared-ai-data:/mnt/ai
+    environment:
+      JAVA_OPTS: >-
+          -Dcontent.service.url=http://alfresco:8080
+          -Dcontent.service.security.basicAuth.username=admin
+          -Dcontent.service.security.basicAuth.password=admin
+          -Delasticsearch.host=elasticsearch 
+          -Dspring.elasticsearch.uris=http://elasticsearch:9200 
+          -Dspring.datasource.url=jdbc:mariadb://maria-db:3306/alfrescoai
+          -Dspring.datasource.username=root
+          -Dspring.datasource.password=root
+          -Dspring.ai.openai.embedding.api-key=AIzaSyByR5fFi1_7pzHPeYPnodDzBj0imi0QSoM
+          -Dspring.ai.openai.chat.api-key=AIzaSyByR5fFi1_7pzHPeYPnodDzBj0imi0QSoM
+          -Dspring.ai.openai.api-key=AIzaSyByR5fFi1_7pzHPeYPnodDzBj0imi0QSoM
+          -Dspring.ai.openai.chat.options.model=gemini-2.0-flash-001
+          -Dspring.ai.openai.model=gemini-2.0-flash-001
+
+  ai-alfresco-rules-service:
+    image: docker.crestsolution.com:8443/digiworks-ai/alfresco-ai-services-rules:v1.4.0
+    platform: linux/amd64
+    depends_on:
+      activemq:
+        condition: service_healthy
+      alfresco:
+        condition: service_healthy 
+    environment:
+        JAVA_OPTS: >-
+          -Dcontent.service.url=http://alfresco:8080
+          -Dcontent.service.security.basicAuth.username=admin
+          -Dcontent.service.security.basicAuth.password=admin
+          -Dspring.activemq.brokerUrl=tcp://activemq:61616
+          -Dai.serviceUrl=http://ai-chat-elastic:8002
+          -Dtransform.office.url=http://transform-core-aio:8090/transform
+
+
   process:
-    image: docker.crestsolution.com:8443/digiworks/aps-activiti:24.1.0
+    image: docker.crestsolution.com:8443/digiworks/aps-activiti:20250516032305
+    platform: linux/amd64
     environment:
       JAVA_OPTS: >-
         -Ddb.driver=org.postgresql.Driver
         -Ddb.username=alfresco
-
     volumes:
       - aps_data:/usr/local/data
       - ./resources/activiti-app.properties:/usr/local/tomcat/lib/activiti-app.properties
-      
+      - ./resources/aps.sh:/usr/local/bin/aps.sh
+      - ./resources/Dynamic-Collaboration-Workflow.zip:/usr/local/bin/Dynamic-Collaboration-Workflow.zip
+      - ./resources/ContractManagement.zip:/usr/local/bin/ContractManagement.zip
+    entrypoint: ["/bin/bash", "-c", "/usr/local/bin/aps.sh & exec /usr/local/tomcat/bin/catalina.sh run"]
+
+
     ports:
       - 9080:8080
     depends_on:
@@ -241,7 +388,7 @@ services:
       - processadmin 
 
   processadmin:
-    image: docker.crestsolution.com:8443/digiworks/aps-admin:24.1.0
+    image: alfresco/process-services-admin:latest
     ports:
       - 8081:8080
     depends_on:
@@ -250,9 +397,10 @@ services:
      - ./resources/activiti-admin.properties:/usr/local/tomcat/lib/activiti-admin.properties
 
   postgresaps:
-    image: postgres:16.2
+    image: postgres:16.5
     ports:
       - 5433:5433
+    platform: linux/amd64
     environment:
       POSTGRES_DB: activiti
       POSTGRES_USER: alfresco
@@ -262,9 +410,10 @@ services:
       - aps-database-data:/var/lib/postgresql/data/
 
   postgresadmin:
-    image: postgres:16.2
+    image: postgres:16.5
     ports:
       - 5434:5434
+    platform: linux/amd64
     environment:
       POSTGRES_DB: activiti-admin
       POSTGRES_USER: alfresco
@@ -282,6 +431,9 @@ services:
       - share
       - process
       - postgresadmin
+      - ai-chat-elastic
+      - document-compare
+      - ooi-service
     volumes:
       - ./resources/nginx.conf:/etc/nginx/nginx.conf
      # - ./resources/server.key:/etc/nginx/certs/server.key
@@ -297,3 +449,9 @@ volumes:
     driver_opts:
       type: tmpfs
       device: tmpfs
+  shared-ai-data:
+    driver: local
+    driver_opts:
+        o: bind
+        type: none
+        device: ./ai-data
