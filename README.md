@@ -1,4 +1,17 @@
-<h1>🚀 DigiWorks Enterprise</h1>
+<p align="center">
+  <img src="https://github.com/Crest-Infosolutions/digiworks-enterprise/blob/main/resources/logo_digiworks.png?raw=true" alt="DigiWorks Logo" width="200"/>
+</p>
+
+<p align="center">
+  <strong style="font-size: 24px;">DigiWorks Enterprise</strong>
+</p>
+
+---
+
+
+
+
+
 
 <p><strong>DigiWorks Enterprise</strong> is a <strong>modern, responsive, and multilingual user interface</strong> for the <strong>Alfresco Digital Business Platform</strong>, built using the <strong>Alfresco Application Development Framework (ADF)</strong>.</p>
 
@@ -60,8 +73,8 @@
 
 <ol>
   <li><strong>Clone the repository</strong>
-    <pre><code>git clone https://github.com/&lt;your-org&gt;/DigiWorks-Enterprise.git
-cd DigiWorks-Enterprise</code></pre>
+    <pre><code>git clone https://github.com/Crest-Infosolutions/digiworks-enterprise.git &&
+cd digiWorks-enterprise</code></pre>
   </li>
 
   <li><strong>Configure Licenses</strong><br>
@@ -74,12 +87,12 @@ cd DigiWorks-Enterprise</code></pre>
   <li><strong>(Optional) Replace Google API Key</strong><br>
   Replace the Gemini API key (<code>AIzaSyByR5...</code>) in <code>compose.yml</code> with your own <a href="https://makersuite.google.com/app/apikey">Google AI Studio</a> key.</li>
 
-  <li><strong>Enable Digital Signature Integration</strong><br>
+  <li><strong>(Optional) Enable Digital Signature Integration</strong><br>
   Ensure ACS is publicly accessible, then update the following properties in <code>resources/alfresco-global.properties</code>:
     <ul>
-      <li><code>digisign.alfresco.url</code></li>
-      <li><code>digisign.alfresco.port</code></li>
-      <li><code>digisign.alfresco.protocol</code></li>
+      <li><code>digisign.alfresco.url:{Public IP of ACS}</code></li>
+      <li><code>digisign.alfresco.port:{PORT}</code></li>
+      <li><code>digisign.alfresco.protocol:{hhtp/https}</code></li>
     </ul>
   </li>
 
