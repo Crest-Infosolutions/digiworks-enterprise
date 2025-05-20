@@ -1,7 +1,6 @@
 services:
   alfresco:
-    image:  docker.crestsolution.com:8443/digiworks/alfresco:20250515062408
-    platform: linux/amd64
+    image:  docker.crestsolution.com:8443/digiworks/alfresco:20250520131057
     environment:
       JAVA_TOOL_OPTIONS: >-
         -Dencryption.keystore.type=JCEKS
@@ -65,6 +64,8 @@ services:
       - ./resources/acs.sh:/usr/local/bin/acs.sh
       - ./resources/legal-contract.docx:/usr/local/bin/legal-contract.docx
       - ./resources/corporate-contract.docx:/usr/local/bin/corporate-contract.docx
+      - ./resources/documentReminder.html.ftl:/usr/local/bin/documentReminder.html.ftl
+      - ./resources/folderReminder.html:/usr/local/bin/folderReminder.html
     entrypoint: ["/bin/bash", "-c", "/usr/local/bin/acs.sh & exec /usr/local/tomcat/bin/catalina.sh run"]
 
   transform-router:
@@ -134,7 +135,7 @@ services:
     volumes:
       - shared-file-store-volume:/tmp/Alfresco/sfs
   share:
-    image: docker.crestsolution.com:8443/digiworks/share:20250515062408
+    image: docker.crestsolution.com:8443/digiworks/share:20250520131057
     platform: linux/amd64
     environment:
       REPO_HOST: "alfresco"
@@ -249,11 +250,11 @@ services:
       start_period: 5s
 
   digiworks-enterprise:
-    image: docker.crestsolution.com:8443/digiworks/adf:20250515172926
+    image: docker.crestsolution.com:8443/digiworks/adf:20250520195633
     platform: linux/amd64
     environment:
-      APP_CONFIG_ECM_HOST: "http://localhost:8080"
-      APP_CONFIG_BPM_HOST: "http://localhost:8080"
+      APP_CONFIG_ECM_HOST: "http://192.168.50.146:8080"
+      APP_CONFIG_BPM_HOST: "http://192.168.50.146:8080"
       APP_CONFIG_PROVIDER: "ALL"
       APP_CONFIG_AUTH_TYPE: "BASIC"
       APP_CONFIG_OAUTH2_CLIENTID: "alfresco-client"
@@ -265,15 +266,17 @@ services:
       APP_CONFIG_OAUTH2_REQUIRE_HTTPS: "false"
       APP_CONFIG_OAUTH2_SILENT_LOGIN: "true"
       APP_CONFIG_OAUTH2_HOST: ""
-      APP_CONFIG_AOS_HOST: "http://localhost:8080/alfresco/aos"
-      APP_CONFIG_BASE_DOCUMENT_SHARE_URL: "http://localhost:8080/digiworks-enterprise/#/preview/s/"
-      APP_CONFIG_BASE_FOLDER_SHARE_URL: "http://localhost:8080/digiworks-enterprise/#/guest-access/"
-      APP_CONFIG_AEV_ENDPOINTS: "http://localhost:8080/OpenAnnotate"
-      APP_CONFIG_AEV_ENDPOINTS_VIDEO: "http://localhost:8080/OpenAnnotateVideo" 
+      APP_CONFIG_AOS_HOST: "http://192.168.50.146:8080/alfresco/aos"
+      APP_CONFIG_BASE_DOCUMENT_SHARE_URL: "http://192.168.50.146:8080/digiworks-enterprise/#/preview/s/"
+      APP_CONFIG_BASE_FOLDER_SHARE_URL: "http://192.168.50.146:8080/digiworks-enterprise/#/guest-access/"
+      APP_CONFIG_AEV_ENDPOINTS: "http://192.168.50.146:8080/OpenAnnotate"
+      APP_CONFIG_AEV_ENDPOINTS_VIDEO: "http://192.168.50.146:8080/OpenAnnotateVideo" 
       NGINX_DIR: "/usr/share/nginx/html/digiworks-enterprise"
     depends_on:
       - alfresco
       - process
+    volumes:
+      - ./resources/digiworks-nginx.conf:/etc/nginx/nginx.conf
 
   document-compare:
     image: docker.crestsolution.com:8443/digiworks/document-compare:v5
@@ -362,9 +365,8 @@ services:
           -Dai.serviceUrl=http://ai-chat-elastic:8002
           -Dtransform.office.url=http://transform-core-aio:8090/transform
 
-
   process:
-    image: docker.crestsolution.com:8443/digiworks/aps-activiti:20250516032305
+    image:  docker.crestsolution.com:8443/digiworks/aps-activiti:latest
     platform: linux/amd64
     environment:
       JAVA_OPTS: >-
@@ -376,19 +378,19 @@ services:
       - ./resources/aps.sh:/usr/local/bin/aps.sh
       - ./resources/Dynamic-Collaboration-Workflow.zip:/usr/local/bin/Dynamic-Collaboration-Workflow.zip
       - ./resources/ContractManagement.zip:/usr/local/bin/ContractManagement.zip
+      - ./resources/activiti.lic:/usr/local/tomcat/lib/activiti.lic
     entrypoint: ["/bin/bash", "-c", "/usr/local/bin/aps.sh & exec /usr/local/tomcat/bin/catalina.sh run"]
-
-
     ports:
       - 9080:8080
     depends_on:
       - postgres
       - alfresco
+      - share
       - postgresaps
       - processadmin 
 
   processadmin:
-    image: alfresco/process-services-admin:latest
+    image: docker.crestsolution.com:8443/digiworks/aps-admin:latest
     ports:
       - 8081:8080
     depends_on:
