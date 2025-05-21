@@ -13,7 +13,7 @@
 
 
 
-<p><strong>DigiWorks Enterprise</strong> is a <strong>modern, responsive, and multilingual user interface</strong> for the <strong>Alfresco Digital Business Platform</strong>, built using the <strong>Alfresco Application Development Framework (ADF)</strong>.</p>
+<p><strong>DigiWorks Enterprise</strong> is a <strong>modern, responsive, and multilingual user interface, an alternate to alfresco share </strong> for <strong>Alfresco Digital Business Platform</strong>, built using the <strong>Alfresco Application Development Framework (ADF)</strong>.</p>
 
 <p>It provides a sleek, user-friendly alternative to <strong>Alfresco Share</strong> and <strong>Activiti App</strong>, and is compatible with:</p>
 
@@ -21,6 +21,7 @@
   <li>✅ <strong>Alfresco Content Services (ACS)</strong></li>
   <li>✅ <strong>Alfresco Governance Services (AGS)</strong></li>
   <li>✅ <strong>Alfresco Process Services (APS)</strong></li>
+  <li>✅ <strong>Alfresco Enterprise Viewer (AEV)</strong></li>
 </ul>
 
 <p>This repository includes all necessary code to run DigiWorks Enterprise using <a href="https://docs.docker.com/get-started/overview/">Docker</a> and <a href="https://docs.docker.com/compose">Docker Compose</a>.</p>
