@@ -320,7 +320,7 @@ services:
           -Dcontent.service.security.basicAuth.password=admin
           -Delasticsearch.host=elasticsearch 
           -Dspring.elasticsearch.uris=http://elasticsearch:9200
-          -Dspring.ai.openai.embedding.api-key=AIzaSyByR5fFi1_7pzHPeYPnodDzBj0imi0QSoM
+          -Dspring.ai.openai.embedding.api-key=AIzaSyByR5...
   
   ai-chat-elastic:
     image: docker.crestsolution.com:8443/digiworks-ai/ai-chat-elastic:v2.1.0
@@ -342,9 +342,9 @@ services:
           -Dspring.datasource.url=jdbc:mariadb://maria-db:3306/alfrescoai
           -Dspring.datasource.username=root
           -Dspring.datasource.password=root
-          -Dspring.ai.openai.embedding.api-key=AIzaSyByR5fFi1_7pzHPeYPnodDzBj0imi0QSoM
-          -Dspring.ai.openai.chat.api-key=AIzaSyByR5fFi1_7pzHPeYPnodDzBj0imi0QSoM
-          -Dspring.ai.openai.api-key=AIzaSyByR5fFi1_7pzHPeYPnodDzBj0imi0QSoM
+          -Dspring.ai.openai.embedding.api-key=AIzaSyByR5...
+          -Dspring.ai.openai.chat.api-key=AIzaSyByR5...
+          -Dspring.ai.openai.api-key=AIzaSyByR5...
           -Dspring.ai.openai.chat.options.model=gemini-2.0-flash-001
           -Dspring.ai.openai.model=gemini-2.0-flash-001
 
