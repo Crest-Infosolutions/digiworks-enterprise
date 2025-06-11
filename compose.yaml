@@ -1,6 +1,6 @@
 services:
   alfresco:
-    image:  docker.crestsolution.com:8443/digiworks/alfresco:20250520131057
+    image:  docker.crestsolution.com:8443/digiworks/alfresco:20250609125526
     environment:
       JAVA_TOOL_OPTIONS: >-
         -Dencryption.keystore.type=JCEKS
@@ -135,7 +135,7 @@ services:
     volumes:
       - shared-file-store-volume:/tmp/Alfresco/sfs
   share:
-    image: docker.crestsolution.com:8443/digiworks/share:20250520131057
+    image: docker.crestsolution.com:8443/digiworks/share:20250522151856
     platform: linux/amd64
     environment:
       REPO_HOST: "alfresco"
@@ -250,7 +250,7 @@ services:
       start_period: 5s
 
   digiworks-enterprise:
-    image: docker.crestsolution.com:8443/digiworks/adf:20250520195633
+    image: docker.crestsolution.com:8443/digiworks/adf:20250609171334
     platform: linux/amd64
     environment:
       APP_CONFIG_ECM_HOST: "http://192.168.50.146:8080"
