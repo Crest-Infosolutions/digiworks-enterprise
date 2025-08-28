@@ -1,6 +1,6 @@
 services:
   alfresco:
-    image:  docker.crestsolution.com:8443/digiworks/alfresco:20250609125526
+    image:  docker.crestsolution.com:8443/digiworks/alfresco:25.2
     environment:
       JAVA_TOOL_OPTIONS: >-
         -Dencryption.keystore.type=JCEKS
@@ -135,7 +135,7 @@ services:
     volumes:
       - shared-file-store-volume:/tmp/Alfresco/sfs
   share:
-    image: docker.crestsolution.com:8443/digiworks/share:20250522151856
+    image: docker.crestsolution.com:8443/digiworks/share:25.2
     platform: linux/amd64
     environment:
       REPO_HOST: "alfresco"
@@ -250,7 +250,7 @@ services:
       start_period: 5s
 
   digiworks-enterprise:
-    image: docker.crestsolution.com:8443/digiworks/adf:20250609171334
+    image: docker.crestsolution.com:8443/digiworks/adf:25.2.2
     platform: linux/amd64
     environment:
       APP_CONFIG_ECM_HOST: "http://192.168.50.146:8080"
@@ -304,7 +304,7 @@ services:
       - ./ai-data/mariadb_data:/var/lib/mysql
 
   ai-scheduler-elastic:
-    image: docker.crestsolution.com:8443/digiworks-ai/ai-scheduler-elastic:v2.1.0
+    image: docker.crestsolution.com:8443/digiworks-ai/ai-scheduler-elastic:v2.2.5
     platform: linux/amd64
     depends_on:
       elasticsearch:
@@ -323,7 +323,7 @@ services:
           -Dspring.ai.openai.embedding.api-key=AIzaSyByR5...
   
   ai-chat-elastic:
-    image: docker.crestsolution.com:8443/digiworks-ai/ai-chat-elastic:v2.1.0
+    image: docker.crestsolution.com:8443/digiworks-ai/ai-chat-elastic:v2.2.15
     platform: linux/amd64
     depends_on:
       elasticsearch:
@@ -349,7 +349,7 @@ services:
           -Dspring.ai.openai.model=gemini-2.0-flash-001
 
   ai-alfresco-rules-service:
-    image: docker.crestsolution.com:8443/digiworks-ai/alfresco-ai-services-rules:v1.4.0
+    image: docker.crestsolution.com:8443/digiworks-ai/alfresco-ai-services-rules:v1.5.2
     platform: linux/amd64
     depends_on:
       activemq:
@@ -366,7 +366,7 @@ services:
           -Dtransform.office.url=http://transform-core-aio:8090/transform
 
   process:
-    image:  docker.crestsolution.com:8443/digiworks/aps-activiti:latest
+    image:  docker.crestsolution.com:8443/digiworks/aps-activiti251:25.2
     platform: linux/amd64
     environment:
       JAVA_OPTS: >-
@@ -390,7 +390,7 @@ services:
       - processadmin 
 
   processadmin:
-    image: docker.crestsolution.com:8443/digiworks/aps-admin:latest
+    image: docker.crestsolution.com:8443/digiworks/aps-admin251:25.2
     ports:
       - 8081:8080
     depends_on:
